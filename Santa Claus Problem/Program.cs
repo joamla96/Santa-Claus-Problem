@@ -150,24 +150,27 @@ namespace Santa_Claus_Problem
 
 		private void Santa()
 		{
-			Console.WriteLine("Santa going to Sleep");
-			santaSem.WaitOne();
-			m.WaitOne();
-			if (reindeerCount == 9)
+			while (programRunning)
 			{
-				Console.WriteLine("Santa got 9 reindeers.");
-				elfSem.Release(3);
-				reindeerCount = 0;
-				prepSleigh();
-				reindeerSem.Release(9);
+				Console.WriteLine("Santa going to Sleep");
+				santaSem.WaitOne();
+				m.WaitOne();
+				if (reindeerCount == 9)
+				{
+					Console.WriteLine("Santa got 9 reindeers.");
+					elfSem.Release(3);
+					reindeerCount = 0;
+					prepSleigh();
+					reindeerSem.Release(9);
+				}
+				else
+				{
+					Console.WriteLine("Santa got 3 elves");
+					helpElves();
+					elfSem.Release(3);
+				}
+				m.ReleaseMutex();
 			}
-			else
-			{
-				Console.WriteLine("Santa got 3 elves");
-				helpElves();
-				elfSem.Release(3);
-			}
-			m.ReleaseMutex();
 		}
 
 		private void prepSleigh()
